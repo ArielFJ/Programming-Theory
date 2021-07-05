@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Camera _camera;
     private Rigidbody _rb;
     [SerializeField] private float _speed = 5.0f;
     [SerializeField] private float _rotationSpeed = 2.0f;
@@ -14,7 +10,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _camera = Camera.main;
         _rb = GetComponent<Rigidbody>();
     }
 
