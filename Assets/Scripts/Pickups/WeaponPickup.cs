@@ -3,26 +3,32 @@ using UnityEngine;
 
 public class WeaponPickup : Pickup
 {
+    private Player _player;
+
+    protected override void Start()
+    {
+        base.Start();
+        InputManager.Instance.onCollect += OnCollect;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         EnableCollectText("F", this);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Player player = other.GetComponent<Player>();
-            if (player != null)
-            {
-                Collect(player);
-            }
-        }
+        _player = other.GetComponent<Player>();
     }
 
     private void OnTriggerExit(Collider other)
     {
+        _player = null;
         DisableCollectText();
+    }
+
+    void OnCollect()
+    {
+        if (_player != null)
+        {
+            Collect(_player);
+        }
     }
 
     protected override void Collect(Character character)

@@ -4,8 +4,9 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody _rb;
     [SerializeField] private float _speed = 5.0f;
-    [SerializeField] private float _rotationSpeed = 2.0f;
     private Vector3 _move;
+
+    [field: SerializeField] public float RotationSpeed { get; private set; } = 2.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +17,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _move = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        _move = InputManager.Instance.MovementVector;
         if (_move.magnitude > 0.1f)
         {
             Move(_move);
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private void MoveCamera()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        transform.Rotate(Vector3.up * mouseX * _rotationSpeed);
+        float mouseX = InputManager.Instance.LookVector.x;
+        transform.Rotate(Vector3.up * mouseX * RotationSpeed * Time.deltaTime);
     }
 }

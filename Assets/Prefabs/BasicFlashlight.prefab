@@ -207,6 +207,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCollected: 0
+  hasReloadTime: 0
+  reloadTime: 0
+  hasFiringTime: 0
+  firingTime: 0
+  useAmmo: 0
+  maxAmmo: 0
+  currentAmmo: 0
   <PositionOffset>k__BackingField: {x: -0.15, y: 0, z: -0.1}
   <RotationOffset>k__BackingField: {x: 0, y: -100, z: -90}
   <Light>k__BackingField: {fileID: 7185652334122021365}

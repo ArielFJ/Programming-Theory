@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CameraRotator : MonoBehaviour
 {
@@ -9,11 +6,12 @@ public class CameraRotator : MonoBehaviour
     [SerializeField] private float _verticalLimit = 60;
     [SerializeField] private bool _invertY = true;
 
-    private float xRotation = 0f;
+    private float xRotation;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _mouseSensivity = transform.parent.GetComponent<PlayerController>().RotationSpeed;
     }
 
     // Update is called once per frame
@@ -25,7 +23,7 @@ public class CameraRotator : MonoBehaviour
 
     private void RotateAroundX()
     {
-        var mouseY = Input.GetAxis("Mouse Y") * _mouseSensivity * Time.deltaTime;
+        var mouseY = InputManager.Instance.LookVector.y * _mouseSensivity * Time.deltaTime;
         xRotation += _invertY ? -mouseY : mouseY;
         xRotation = Mathf.Clamp(xRotation, -_verticalLimit, _verticalLimit);
         transform.localRotation = Quaternion.Euler(xRotation, 0, 0);

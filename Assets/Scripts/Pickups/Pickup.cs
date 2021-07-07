@@ -9,7 +9,7 @@ public class Pickup : MonoBehaviour
 
     [field: SerializeField] public string Name { get; set; }
 
-    private void Start()
+    protected virtual void Start()
     {
         theCollider = GetComponent<Collider>();
         theCollider.isTrigger = true;
