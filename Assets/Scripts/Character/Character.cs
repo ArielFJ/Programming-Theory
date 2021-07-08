@@ -2,6 +2,8 @@
 
 public class Character : MonoBehaviour
 {
+    protected int lifeAmount;
+
     public virtual void TakeDamage(int damage)
     {
 
