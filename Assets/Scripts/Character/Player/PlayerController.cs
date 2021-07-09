@@ -4,6 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody _rb;
     [SerializeField] private float _speed = 5.0f;
+    [SerializeField] private float _runningSpeedMultiplier = 1.5f;
     private Vector3 _move;
 
     [field: SerializeField] public float RotationSpeed { get; private set; } = 2.0f;
@@ -30,7 +31,8 @@ public class PlayerController : MonoBehaviour
         // Transform the targetPos from local to world position
         // Because MovePosition works with world position
         var moveDir = transform.TransformDirection(targetPos);
-        _rb.MovePosition(_rb.position + moveDir * (_speed * Time.deltaTime));
+        var speed = (InputManager.Instance.IsRunning ? _runningSpeedMultiplier : 1 ) * _speed * Time.deltaTime;
+        _rb.MovePosition(_rb.position + moveDir * speed);
     }
 
     private void MoveCamera()

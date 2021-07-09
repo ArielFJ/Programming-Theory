@@ -1,12 +1,19 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Collidable : MonoBehaviour
 {
-    public UnityEvent<Collider> onCollide;
+    public UnityEvent<Collision> onCollide;
+    public UnityEvent<Collider> onTriggering;
+
+    private void OnCollisionEnter(Collision other)
+    {
+        onCollide?.Invoke(other);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        onCollide?.Invoke(other);
+        onTriggering?.Invoke(other);
     }
 }

@@ -13,9 +13,16 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
     private InputAction collect;
     private InputAction fire;
     private InputAction fireDown;
+    private InputAction run;
+
+    #region States
+
+    public bool IsRunning { get; private set; }
+    
+    #endregion
 
     // These actions are performed when the button is pressed
-    #region Action Down
+    #region Actions
 
     public Action onJump;
     public Action onCollect;
@@ -54,6 +61,7 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
         collect = playerInputAction.Player.Collect;
         fire = playerInputAction.Player.Fire;
         fireDown = playerInputAction.Player.FireDown;
+        run = playerInputAction.Player.Run;
 
         movement.performed += OnMovement;
         movement.canceled += OnMovement;
@@ -61,6 +69,8 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
         look.canceled += OnLook;
         fireDown.performed += OnFireDown;
         fireDown.canceled += OnFireDown;
+        run.performed += OnRun;
+        run.canceled += OnRun;
 
         jump.performed += OnJump;
         collect.performed += OnCollect;
@@ -72,6 +82,7 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
         collect.Enable();
         fire.Enable();
         fireDown.Enable();
+        run.Enable();
     }
 
     private void OnDisable()
@@ -82,6 +93,7 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
         collect.Disable();
         fire.Disable();
         fireDown.Disable();
+        run.Disable();
     }
 
     private void Update()
@@ -152,6 +164,18 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
             isFirePressed = true;
         if (context.canceled)
             isFirePressed = false;
+    }
+
+    #endregion
+
+    #region Run
+
+    public void OnRun(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            IsRunning = true;
+        if (context.canceled)
+            IsRunning = false;
     }
 
     #endregion

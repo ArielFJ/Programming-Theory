@@ -65,6 +65,14 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""05872b3b-c50b-4086-a24a-3ae30721de13"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -243,6 +251,28 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d603a46-1e48-4a45-89a4-213093848961"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75e7608e-edc9-4778-8007-0150ba6c16b9"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -257,6 +287,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         m_Player_Collect = m_Player.FindAction("Collect", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_FireDown = m_Player.FindAction("FireDown", throwIfNotFound: true);
+        m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -312,6 +343,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Collect;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_FireDown;
+    private readonly InputAction m_Player_Run;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -322,6 +354,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         public InputAction @Collect => m_Wrapper.m_Player_Collect;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @FireDown => m_Wrapper.m_Player_FireDown;
+        public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -349,6 +382,9 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @FireDown.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireDown;
                 @FireDown.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireDown;
                 @FireDown.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireDown;
+                @Run.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @Run.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
+                @Run.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRun;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -371,6 +407,9 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @FireDown.started += instance.OnFireDown;
                 @FireDown.performed += instance.OnFireDown;
                 @FireDown.canceled += instance.OnFireDown;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
             }
         }
     }
@@ -383,5 +422,6 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         void OnCollect(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnFireDown(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
 }
