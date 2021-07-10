@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Collider))]
@@ -8,6 +9,7 @@ public class Pickup : MonoBehaviour
     protected Collider theCollider;
 
     [field: SerializeField] public string Name { get; set; }
+    public UnityEvent onCollected;
 
     protected virtual void Start()
     {
@@ -17,7 +19,7 @@ public class Pickup : MonoBehaviour
 
     protected virtual void Collect(Character character)
     {
-
+        onCollected?.Invoke();
     }
 
     protected void EnableCollectText(string axisName, Pickup pickup)
