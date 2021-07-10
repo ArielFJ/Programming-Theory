@@ -33,6 +33,7 @@ public class WeaponPickup : Pickup
 
     protected override void Collect(Character character)
     {
+        base.Collect(character);
         Player player = character as Player;
         Weapon weapon = GetComponent<Weapon>();
         player.AddWeapon(weapon);

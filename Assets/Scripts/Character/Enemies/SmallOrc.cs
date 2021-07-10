@@ -37,8 +37,8 @@ public class SmallOrc : Enemy
     {
         if (_target == null) return;
         agentDestination = _target.position;
-        _agent.SetDestination(_target.position);
-        Debug.Log($"Move: {Vector3.Distance(transform.position, _target.position)}");
+        _agent.SetDestination(new Vector3(agentDestination.x, 0, agentDestination.z));
+        Debug.Log($"Move: {Vector3.Distance(transform.position, agentDestination)}");
         _agent.isStopped = false;
         _animator.SetFloat("MoveSpeed", .8f);
     }
