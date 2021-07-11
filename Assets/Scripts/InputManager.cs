@@ -2,23 +2,31 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
+[RequireComponent(typeof(PlayerInput))]
+public class InputManager :
+    MonoBehaviour,
+    PlayerInputAction.IPlayerActions,
+    PlayerInputAction.IPauseMenuActions
 {
     public static InputManager Instance { get; private set; }
 
-    private PlayerInputAction playerInputAction;
-    private InputAction movement;
-    private InputAction jump;
-    private InputAction look;
-    private InputAction collect;
-    private InputAction fire;
-    private InputAction fireDown;
-    private InputAction run;
+    private PlayerInput _playerInput;
+
+    private PlayerInputAction _playerInputAction;
+    private InputAction _movement;
+    private InputAction _jump;
+    private InputAction _look;
+    private InputAction _collect;
+    private InputAction _fire;
+    private InputAction _fireDown;
+    private InputAction _run;
+    private InputAction _pause;
+    private InputAction _unpause;
 
     #region States
 
     public bool IsRunning { get; private set; }
-    
+
     #endregion
 
     // These actions are performed when the button is pressed
@@ -28,7 +36,9 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
     public Action onCollect;
     public Action onFire;
     public Action onFireDown;
-    private bool isFirePressed;
+    public Action onPause;
+    public Action onUnpause;
+    private bool _isFirePressed;
 
     #endregion
 
@@ -50,56 +60,69 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
         }
 
         Instance = this;
-        playerInputAction = new PlayerInputAction();
+        _playerInputAction = new PlayerInputAction();
+    }
+
+    private void Start()
+    {
+        _playerInput = GetComponent<PlayerInput>();
     }
 
     private void OnEnable()
     {
-        movement = playerInputAction.Player.Movement;
-        look = playerInputAction.Player.Look;
-        jump = playerInputAction.Player.Jump;
-        collect = playerInputAction.Player.Collect;
-        fire = playerInputAction.Player.Fire;
-        fireDown = playerInputAction.Player.FireDown;
-        run = playerInputAction.Player.Run;
+        _movement = _playerInputAction.Player.Movement;
+        _look = _playerInputAction.Player.Look;
+        _jump = _playerInputAction.Player.Jump;
+        _collect = _playerInputAction.Player.Collect;
+        _fire = _playerInputAction.Player.Fire;
+        _fireDown = _playerInputAction.Player.FireDown;
+        _run = _playerInputAction.Player.Run;
+        _pause = _playerInputAction.Player.Pause;
+        _unpause = _playerInputAction.PauseMenu.Unpause;
 
-        movement.performed += OnMovement;
-        movement.canceled += OnMovement;
-        look.performed += OnLook;
-        look.canceled += OnLook;
-        fireDown.performed += OnFireDown;
-        fireDown.canceled += OnFireDown;
-        run.performed += OnRun;
-        run.canceled += OnRun;
+        _movement.performed += OnMovement;
+        _movement.canceled += OnMovement;
+        _look.performed += OnLook;
+        _look.canceled += OnLook;
+        _fireDown.performed += OnFireDown;
+        _fireDown.canceled += OnFireDown;
+        _run.performed += OnRun;
+        _run.canceled += OnRun;
 
-        jump.performed += OnJump;
-        collect.performed += OnCollect;
-        fire.performed += OnFire;
+        _jump.performed += OnJump;
+        _collect.performed += OnCollect;
+        _fire.performed += OnFire;
+        _pause.performed += OnPause;
+        _unpause.performed += OnUnpause;
 
-        movement.Enable();
-        look.Enable();
-        jump.Enable();
-        collect.Enable();
-        fire.Enable();
-        fireDown.Enable();
-        run.Enable();
+        _movement.Enable();
+        _look.Enable();
+        _jump.Enable();
+        _collect.Enable();
+        _fire.Enable();
+        _fireDown.Enable();
+        _run.Enable();
+        _pause.Enable();
+        //_unpause.Enable();
     }
 
     private void OnDisable()
     {
-        movement.Disable();
-        look.Disable();
-        jump.Disable();
-        collect.Disable();
-        fire.Disable();
-        fireDown.Disable();
-        run.Disable();
+        _movement.Disable();
+        _look.Disable();
+        _jump.Disable();
+        _collect.Disable();
+        _fire.Disable();
+        _fireDown.Disable();
+        _run.Disable();
+        _pause.Disable();
+        _unpause.Disable();
     }
 
     private void Update()
     {
         // For OnFireDown event
-        if (isFirePressed) onFireDown?.Invoke();
+        if (_isFirePressed) onFireDown?.Invoke();
     }
 
     #endregion
@@ -161,9 +184,9 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
     public void OnFireDown(InputAction.CallbackContext context)
     {
         if (context.performed)
-            isFirePressed = true;
+            _isFirePressed = true;
         if (context.canceled)
-            isFirePressed = false;
+            _isFirePressed = false;
     }
 
     #endregion
@@ -176,6 +199,30 @@ public class InputManager : MonoBehaviour, PlayerInputAction.IPlayerActions
             IsRunning = true;
         if (context.canceled)
             IsRunning = false;
+    }
+
+    #endregion
+
+    #region Pause
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        onPause?.Invoke();
+        _playerInput.SwitchCurrentActionMap(nameof(PlayerInputAction.PauseMenu));
+        _unpause.Enable();
+        _pause.Disable();
+    }
+
+    #endregion
+
+    #region Unpause
+
+    public void OnUnpause(InputAction.CallbackContext context)
+    {
+        onUnpause?.Invoke();
+        _playerInput.SwitchCurrentActionMap(nameof(PlayerInputAction.Player));
+        _unpause.Disable();
+        _pause.Enable();
     }
 
     #endregion

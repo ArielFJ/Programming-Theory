@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,8 +26,8 @@ public class Collidable : MonoBehaviour
                 onCollide?.Invoke(other);
             }
         }
-        
-        if (shouldDestroyAfterActivation) gameObject.SetActive(false);
+
+        if (shouldDestroyAfterActivation) StartCoroutine(DestroyObject());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -43,6 +44,13 @@ public class Collidable : MonoBehaviour
             }
         }
 
-        if (shouldDestroyAfterActivation) gameObject.SetActive(false);
+        if (shouldDestroyAfterActivation) StartCoroutine(DestroyObject());
     }
+
+    IEnumerator DestroyObject()
+    {
+        yield return new WaitForSeconds(1.5f);
+        gameObject.SetActive(false);
+    }
+
 }

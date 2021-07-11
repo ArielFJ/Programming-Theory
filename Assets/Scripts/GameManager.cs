@@ -1,18 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GameManager Instance;
+
+    private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PauseGame()
     {
-        
+        Cursor.lockState = CursorLockMode.None;
+        // Any other thing on pause
+    }
+
+    public void ResumeGame()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        // Any other thing on resume
+    }
+
+    public void LoadGameScene()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        SceneManager.LoadScene(1);
+    }
+
+    public void LoadMenuScene()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene(0);
+    }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
     }
 }
