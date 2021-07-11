@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 
+// INHERITANCE
 public class WeaponPickup : Pickup
 {
     private Player _player;
@@ -31,6 +31,7 @@ public class WeaponPickup : Pickup
         }
     }
 
+    // POLYMORPHISM
     protected override void Collect(Character character)
     {
         base.Collect(character);

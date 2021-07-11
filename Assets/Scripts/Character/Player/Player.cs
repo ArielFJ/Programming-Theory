@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// INHERITANCE
 public class Player : Character
 {
     [SerializeField] private Transform weaponPlaceholder;
 
+    // ENCAPSULATION
     [field: SerializeField] public List<Weapon> Weapons { get; private set; }
     [field: SerializeField] public Weapon ActiveWeapon { get; private set; }
 
