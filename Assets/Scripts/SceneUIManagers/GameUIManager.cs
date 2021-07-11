@@ -8,6 +8,7 @@ public class GameUIManager : MonoBehaviour
     {
         InputManager.Instance.onPause += PauseGame;
         InputManager.Instance.onUnpause += ResumeGame;
+        FindObjectOfType<FadePanel>().PlayFadeOutAnimation();
     }
 
     public void PauseGame()
